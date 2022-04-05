@@ -1,4 +1,5 @@
-const { response } = require('express');
+// const { response } = require('express');
+const x = document.getElementById('snackbar');
 
 const newFormHandler = async function (event) {
   event.preventDefault();
@@ -6,14 +7,26 @@ const newFormHandler = async function (event) {
   const post_id = event.target.getAttribute('data-id');
 
   if (comment && post_id) {
-    const response = await fetch(`/api/comments`, {
+    const response = await fetch(`/api/comment`, {
       method: 'POST',
       body: JSON.stringify({ comment, post_id }),
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  document.location.replace('/');
+  if (response.ok) {
+    location.reload();
+  } else {
+    x.innerHTML = 'Comment failed to post.';
+    x.className = 'show';
+
+    setTimeout(function () {
+      x.className = x.className.replace('show', '');
+      x.innerHTML = '';
+    }, 3000);
+  }
 };
 
-document.querySelector('.comment-message').addEventListener('submit', newFormHandler);
+if (document.querySelector('.comment-message')) {
+  document.querySelector('.comment-message').addEventListener('submit', newFormHandler);
+}
