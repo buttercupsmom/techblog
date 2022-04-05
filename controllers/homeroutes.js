@@ -6,15 +6,7 @@ router.get('/', async (req, res) => {
   try {
     // Get all posts and JOIN with user data
     const postData = await Post.findAll({
-      include: [
-        User,
-        Comment,
-
-        // {
-        //   model: User,
-        //   attributes: ['name'],
-        // },
-      ],
+      include: [User, Comment],
     });
 
     // Serialize data so the template can read it
@@ -82,6 +74,41 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
-module.exports = router;
+// GET route to create a post
+router.get('/profile/post', withAuth, async (req, res) => {
+  res.render('editpost', {
+    logged_in: true,
+  });
+});
 
-// user of site types in
+// GET route to edit blog post
+router.get('/profile/post/:id', withAuth, async (req, res) => {
+  if (!req.params.is) {
+    res.render('editpost');
+  }
+  try {
+    const postData = await Post.findByPk(req.params.id, {
+      inclue: [
+        {
+          model: Comment,
+          include: [User],
+        },
+        {
+          model: User,
+        },
+      ],
+      order: [[Comment, 'date_created', desc]],
+    });
+    const post = postData.get({ plain: true });
+
+    res.render('editpost', {
+      ...post,
+      logged_in: req.session.logged_in,
+      is_author: req.session.user_id,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+module.exports = router;

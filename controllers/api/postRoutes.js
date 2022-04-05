@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const { Post } = require('../../models');
+const withAuth = require('../../utils/auth');
 
+// POST to blog
 router.post('/', async (req, res) => {
   try {
     const newPost = await Post.create({
@@ -14,6 +16,28 @@ router.post('/', async (req, res) => {
   }
 });
 
+// PUT to edit post
+router.put('/:id', withAuth, async (req, res) => {
+  try {
+    let postData = await Post.belongsTo(
+      update(req.body, {
+        where: {
+          id: req.params.id,
+          user_id: req.session.user_id,
+        },
+      })
+    );
+    if (!postData[0]) {
+      res.status(404).json({ message: ' No post with this id' });
+      return;
+    }
+    res.status(200).json(postData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// DELETE post
 router.delete('/:id', async (req, res) => {
   try {
     const postData = await Post.destroy({
