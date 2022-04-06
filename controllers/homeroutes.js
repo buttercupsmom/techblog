@@ -31,7 +31,11 @@ router.get('/post/:id', async (req, res) => {
           model: User,
           attributes: ['title'],
         },
+        {
+          model: User,
+        },
       ],
+      order: [Comment, 'date-created', desc],
     });
 
     const post = postData.get({ plain: true });
