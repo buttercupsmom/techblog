@@ -1,4 +1,4 @@
-// const { response } = require('express');
+const { response } = require('express');
 const x = document.getElementById('snackbar');
 
 const newFormHandler = async function (event) {
@@ -6,7 +6,7 @@ const newFormHandler = async function (event) {
   const title = document.querySelector('#comment-input').value;
   const post_id = event.target.getAttribute('data-id');
 
-  if (title) {
+  if (title && post_id) {
     const response = await fetch(`/api/comment`, {
       method: 'POST',
       body: JSON.stringify({ title, post_id }),
