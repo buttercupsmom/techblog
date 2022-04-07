@@ -1,41 +1,46 @@
-{{! form for create blog post }}
-<div class='row w-full jc-c pt-3'>
-  <div class='col-md-6 bgc-w postCard'>
-    <h2 class='fs-3'>Create a Blog Post</h2>
-    <div class='p-3 postCreate'>
-      <form class='form posts-message'>
-        <div class='form-group'>
-          <label for='comment-input' class='va-t m-0'>Blog Post:</label>
-          <input class='message-input messageBox' type='text' id='message-input' />
+<div class='text-center'>
+  <h2>{{title}}</h2>
+  <p>{{description}}</p>
+  <p>Created by {{user.name}} on {{format_date date_created}}</p>
+  <form class='form delete-comment-form'>
+    {{#each comments as |comment|}}
+      <div class='d-flex p-1'>
+        <div>
+          {{user.name}}
+          on
+          {{format_date date_created}}:
+          {{comment.title}}
+          <button type='submit' data-action='{{comment.id}}' class='btn btn-primary'>Delete</button>
         </div>
-        <div class='form-gro flex justify-flex-end'>
-          <button class='btn btn-primary fr' type='submit' id='submitBtn'>Submit</button>
-        </div>
-      </form>
+      </div>
+    {{/each}}
+  </form>
+  {{! update button }}
+  <form class='form update-comment-form'>
+    <div class='form-group d-flex'>
     </div>
-  </div>
+    <div class='form-group'>
+      <button type='submit' class='btn btn-primary'>Update Post</button>
+    </div>
+  </form>
+
 </div>
 
-{{! Form to create a new comment, dont show comments on homepage }}
-
-<div class='row'>
-  <div class='card-border ml-5 mt-2 col-md-6'>
-    <h2 class='pt-2 ta-c fs-15'>{{post.comment}}</h2>
-
-    <form class='form posts-message comment-message'>
-      <div class='form-group'>
-        <label for='comment-input'>Comment:</label>
-        <input class='comment-input messageBox' type='text' id='comment-input' />
-        <input type='hidden' id='post_id' value='{{post.id}}' />
-      </div>
-      <div class='form-group'>
-        <button class='btn btn-primary' type='submit' id='submitBtn'>Submit</button>
-      </div>
-    </form>
+{{! add a comment by adding a form, don't show comment on home page  }}
+{{#if logged_in}}
+  <form class='form new-comment-form'>
+    <div class='form-group d-flex'>
+      <input value='{{id}}' type='hidden' name='post_id' />
+      <label for='comment-desc'>Add a comment:</label>
+      <textarea class='form-input' id='comment-desc' name='comment-desc'></textarea>
+    </div>
+    <div class='form-group'>
+      <button type='submit' class='btn btn-primary'>Create</button>
+    </div>
+  </form>
+{{else}}
+  <div class='form-group'>
+    <a href='/login'>Log in</a>
   </div>
-</div>
-
-{{! snack bar to show temp error message }}
-<div id='snackbar'></div>
-
-<script src='./js/posts.js'></script>
+{{/if}}
+<script src='../js/post.js'></script>

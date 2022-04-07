@@ -28,8 +28,8 @@ router.get('/post/:id', async (req, res) => {
     const postData = await Post.findByPk(req.params.id, {
       include: [
         {
-          model: User,
-          attributes: ['title'],
+          model: Comment,
+          attributes: [User],
         },
         {
           model: User,
@@ -80,41 +80,41 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
-// GET route to create a post
-router.get('/profile/post', withAuth, async (req, res) => {
-  res.render('editpost', {
-    logged_in: true,
-  });
-});
+// // GET route to create a post
+// router.get('/profile/post', withAuth, async (req, res) => {
+//   res.render('editpost', {
+//     logged_in: true,
+//   });
+// });
 
 // GET route to edit blog post
-router.get('/profile/post/:id', withAuth, async (req, res) => {
-  if (!req.params.is) {
-    res.render('editpost');
-  }
-  try {
-    const postData = await Post.findByPk(req.params.id, {
-      inclue: [
-        {
-          model: Comment,
-          include: [User],
-        },
-        {
-          model: User,
-        },
-      ],
-      order: [[Comment, 'date_created', desc]],
-    });
-    const post = postData.get({ plain: true });
+// router.get('/profile/post/:id', withAuth, async (req, res) => {
+//   if (!req.params.is) {
+//     res.render('editpost');
+//   }
+//   try {
+//     const postData = await Post.findByPk(req.params.id, {
+//       inclue: [
+//         {
+//           model: Comment,
+//           include: [User],
+//         },
+//         {
+//           model: User,
+//         },
+//       ],
+//       order: [[Comment, 'date_created', desc]],
+//     });
+//     const post = postData.get({ plain: true });
 
-    res.render('editpost', {
-      ...post,
-      logged_in: req.session.logged_in,
-      is_author: req.session.user_id,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+//     res.render('editpost', {
+//       ...post,
+//       logged_in: req.session.logged_in,
+//       is_author: req.session.user_id,
+//     });
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 module.exports = router;
