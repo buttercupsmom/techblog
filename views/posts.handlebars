@@ -30,7 +30,7 @@
 {{!-- {{#if logged_in}} --}}
 <form class='form new-comment-form'>
   <div class='form-group d-flex'>
-    <input value='{{id}}' type='hidden' name='post_id' />
+    <input value={{id}} type='hidden' name='post_id' />
     <label for='comment-desc'>Add a comment:</label>
     <textarea class='form-input' id='comment-desc' name='comment-desc'></textarea>
   </div>
@@ -43,4 +43,4 @@
   <a href='/login'>Log in</a>
 </div>
 {{!-- {{/if}} --}}
-<script src='../js/posts.js'></script>
+<script src='/js/posts.js'></script>
