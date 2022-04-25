@@ -10,7 +10,7 @@
           on
           {{format_date date_created}}:
           {{comment.title}}
-          <button type='submit' data-action='{{comment.id}}' class='btn btn-primary'>Delete</button>
+          <button id='deleteComment' type='submit' data-action={{comment.id}} class='btn btn-primary'>Delete</button>
         </div>
       </div>
     {{/each}}
